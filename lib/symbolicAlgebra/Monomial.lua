@@ -1,70 +1,12 @@
-local List = require(script.Parent.Parent.Parent.Llama).List
+local mathUtil = require(script.Parent.Parent.util.mathUtil)
+local binarySearch = mathUtil.binarySearch
+local lexicographicCompare = mathUtil.lexicographicCompare
 
+local List = require(script.Parent.Parent.Parent.Llama).List
 local Set = require(script.Parent.Set)
 local directSum = require(script.Parent.Duple).directSum
 
 local Monomial = {}
-
-local function lexicographicCompare(left, right)
-    local i = 1
-
-    while i < #left and i < #right do
-        if left[i] == right[i] then
-            i = i + 1
-        else
-            return left[i] < right[i]
-        end
-    end
-
-    if #left >= #right then
-        return left[i] < right[i]
-    else
-        return left[i] <= right[i]
-    end
-end
-
-local function subarray(array, index)
-    local result = {}
-
-    for i = 1, math.min(index, #array) do
-        result[i] = array[i]
-    end
-
-    return result
-end
-
-local function suparray(array, index)
-    local result = {}
-
-    for i = index, #array do
-        result[#result+1] = array[i]
-    end
-end
-
-
-local function binarySearch(element, array)
-    if array == nil or #array == 0 then
-        return false
-    end
-
-    local checkIndex = math.floor(#array / 2)
-
-    if #array == 1 then
-        if element == array[1] then
-            return 1
-        else
-            return false
-        end
-    end
-
-    if element < array[checkIndex] then
-        return binarySearch(element, subarray(array, checkIndex - 1))
-    elseif element > array[checkIndex] then
-        return checkIndex + binarySearch(element, suparray(array, checkIndex + 1))
-    else
-        return checkIndex
-    end
-end
 
 local function monomialFromArrayAndPreSet(preset, array, coeff)
     if #array ~= #preset then
